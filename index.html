@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournoi de Washer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="header">
+  <h1 id="appTitle">Washer</h1>
+  <select id="modeSelect">
+    <option value="21">Jeu à 21</option>
+    <option value="11">Jeu à 11</option>
+  </select>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-tabs" id="mainNav">
+    <button class="nav-tab active" data-tab="setup">⚙ Config</button>
+    <button class="nav-tab" data-tab="terrain">🏟 Terrains</button>
+    <button class="nav-tab" data-tab="match">🎯 Match</button>
+    <button class="nav-tab" data-tab="classement">🏆 Classement</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- CONFIG -->
+  <div class="screen active" id="tab-setup">
+    <div class="card">
+      <h2>Mode de jeu</h2>
+      <div class="nav-tabs" id="modeNav">
+        <button class="nav-tab active" data-mode="tournoi">Tournoi</button>
+        <button class="nav-tab" data-mode="solo">Solo / 1v1</button>
+      </div>
+
+      <div id="setupTournoi">
+        <div class="grid2">
+          <div class="form-row">
+            <label>Nombre d'équipes</label>
+            <select id="teamCount">
+              <option value="4">4 équipes</option>
+              <option value="6" selected>6 équipes</option>
+              <option value="8">8 équipes</option>
+              <option value="10">10 équipes</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Nombre de terrains</label>
+            <select id="fieldCount">
+              <option value="1">1 terrain</option>
+              <option value="2">2 terrains</option>
+              <option value="3" selected>3 terrains</option>
+            </select>
+          </div>
+        </div>
+        <div id="teamNamesContainer"></div>
+        <button class="btn btn-primary full" id="startTournoi">Démarrer le tournoi</button>
+      </div>
+
+      <div id="setupSolo" style="display:none">
+        <div class="form-row"><label>Joueur 1</label><input type="text" id="soloName1" value="Équipe A"></div>
+        <div class="form-row"><label>Joueur 2</label><input type="text" id="soloName2" value="Équipe B"></div>
+        <button class="btn btn-primary full" id="startSolo">Commencer la partie</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Règles</h2>
+      <div id="rulesList" class="rules-text"></div>
+    </div>
+  </div>
+
+  <!-- TERRAINS -->
+  <div class="screen" id="tab-terrain">
+    <div id="fieldsGrid" class="fields-grid"></div>
+    <div class="card">
+      <h2>Matchs à venir</h2>
+      <div id="scheduleList" class="muted"></div>
+    </div>
+  </div>
+
+  <!-- MATCH -->
+  <div class="screen" id="tab-match">
+    <div class="card">
+      <div id="matchBanner" class="match-banner">Aucun match sélectionné</div>
+      <div class="score-display">
+        <div class="score-side">
+          <div class="score-team-name" id="nameA">Équipe A</div>
+          <div class="score-big" id="scoreA">0</div>
+        </div>
+        <div class="vs-divider">—</div>
+        <div class="score-side">
+          <div class="score-team-name" id="nameB">Équipe B</div>
+          <div class="score-big" id="scoreB">0</div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="btn-col">
+          <div class="btn-col-label" id="labelBtnA">Équipe A</div>
+          <button class="btn score-btn" data-team="A" data-pts="1">+1 Planche</button>
+          <button class="btn score-btn" data-team="A" data-pts="3">+3 Trou</button>
+        </div>
+        <div class="btn-col">
+          <div class="btn-col-label" id="labelBtnB">Équipe B</div>
+          <button class="btn score-btn" data-team="B" data-pts="1">+1 Planche</button>
+          <button class="btn score-btn" data-team="B" data-pts="3">+3 Trou</button>
+        </div>
+      </div>
+
+      <div class="undo-log" id="undoLog"></div>
+
+      <div class="actions-row">
+        <button class="btn" id="undoBtn">↩ Annuler</button>
+        <button class="btn btn-warning" id="resetRoundBtn">↺ Reset manche</button>
+        <button class="btn btn-success" id="endMatchBtn">✓ Terminer le match</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Historique des manches</h2>
+      <div id="roundHistory" class="muted">Aucune manche jouée.</div>
+    </div>
+  </div>
+
+  <!-- CLASSEMENT -->
+  <div class="screen" id="tab-classement">
+    <div class="card">
+      <h2>Classement</h2>
+      <div class="table-wrap">
+        <table id="standingsTable">
+          <thead>
+            <tr><th>#</th><th>Équipe</th><th>PJ</th><th>V</th><th>D</th><th>PF</th><th>PA</th><th>Diff</th></tr>
+          </thead>
+          <tbody id="standingsBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Statistiques</h2>
+      <div class="grid3">
+        <div class="metric"><div class="metric-label">Matchs joués</div><div class="metric-value" id="statM">0</div></div>
+        <div class="metric"><div class="metric-label">Points totaux</div><div class="metric-value" id="statP">0</div></div>
+        <div class="metric"><div class="metric-label">Moy. pts/match</div><div class="metric-value" id="statA">—</div></div>
+      </div>
+    </div>
+    <div class="card" id="resultsCard" style="display:none">
+      <h2>Résultats</h2>
+      <div id="resultsList" class="muted"></div>
+    </div>
+  </div>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
