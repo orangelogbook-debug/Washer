@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#1E3A8A">
+  <title>Tournoi de Washer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- PAGE D'ACCUEIL -->
+<div id="splashScreen" class="splash">
+  <img src="washer.png" alt="Washer" class="splash-bg">
+  <div class="splash-overlay"></div>
+  <div class="splash-content">
+    <h1 class="splash-title">Washer</h1>
+    <p class="splash-subtitle">Tournoi &amp; Solo</p>
+    <div class="splash-slider-wrap">
+      <div class="slider-track-v" id="sliderTrack">
+        <span class="slider-label-v" id="sliderLabel">Glisse vers le haut</span>
+        <div class="slider-thumb-v" id="sliderThumb">
+          <span class="slider-washer">🥏</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="appContent" style="display:none">
+<div class="header">
+  <h1 id="appTitle">Washer</h1>
+  <button id="logoutBtn" style="
+    background:rgba(255,255,255,0.15);
+    border:1.5px solid rgba(255,255,255,0.35);
+    color:#fff;
+    border-radius:8px;
+    padding:7px 14px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+    min-height:36px;
+  ">⏻ Quitter</button>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-tabs" id="mainNav">
+    <button class="nav-tab active" data-tab="setup">⚙ Config</button>
+    <button class="nav-tab" data-tab="terrain">🏟 Terrains</button>
+    <button class="nav-tab" data-tab="match">🎯 Match</button>
+    <button class="nav-tab" data-tab="classement">🏆 Classement</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- CONFIG -->
+  <div class="screen active" id="tab-setup">
+    <div class="card">
+      <h2>Mode de jeu</h2>
+      <div class="nav-tabs" id="modeNav">
+        <button class="nav-tab active" data-mode="tournoi">Tournoi</button>
+        <button class="nav-tab" data-mode="solo">Solo / 1v1</button>
+      </div>
+
+      <!-- TOURNOI -->
+      <div id="setupTournoi">
+        <div class="grid2">
+          <div class="form-row">
+            <label>Nombre d'équipes</label>
+            <select id="teamCount">
+              <option value="1">1 équipe (solo)</option>
+              <option value="2">2 équipes</option>
+              <option value="3">3 équipes</option>
+              <option value="4">4 équipes</option>
+              <option value="5">5 équipes</option>
+              <option value="6" selected>6 équipes</option>
+              <option value="7">7 équipes</option>
+              <option value="8">8 équipes</option>
+              <option value="9">9 équipes</option>
+              <option value="10">10 équipes</option>
+              <option value="11">11 équipes</option>
+              <option value="12">12 équipes</option>
+              <option value="14">14 équipes</option>
+              <option value="16">16 équipes</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Nombre de terrains</label>
+            <select id="fieldCount">
+              <option value="1">1 terrain</option>
+              <option value="2">2 terrains</option>
+              <option value="3">3 terrains</option>
+              <option value="4" selected>4 terrains</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Game à</label>
+            <select id="gameModeSelect">
+              <option value="21" selected>21 points</option>
+              <option value="11">11 points</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Format du match</label>
+            <select id="bestOfSelect">
+              <option value="3" selected>Meilleur 2 sur 3</option>
+              <option value="1">Match simple</option>
+            </select>
+          </div>
+        </div>
+        <div id="teamNamesContainer"></div>
+        <div id="teamPlayersContainer"></div>
+        <button class="btn btn-primary full" id="startTournoi">Démarrer le tournoi</button>
+      </div>
+
+      <!-- SOLO -->
+      <div id="setupSolo" style="display:none">
+        <div class="grid2">
+          <div class="form-row">
+            <label>Game à</label>
+            <select id="gameModeSelectSolo">
+              <option value="21" selected>21 points</option>
+              <option value="11">11 points</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Format du match</label>
+            <select id="bestOfSelectSolo">
+              <option value="3" selected>Meilleur 2 sur 3</option>
+              <option value="1">Match simple</option>
+            </select>
+          </div>
+        </div>
+        <div style="background:var(--bg);border-radius:var(--radius-sm);padding:10px;margin-bottom:8px">
+          <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:6px">Équipe 1</div>
+          <div class="form-row"><label>Joueur 1</label><input type="text" id="soloP1A" value="Joueur 1A"></div>
+          <div class="form-row"><label>Joueur 2</label><input type="text" id="soloP2A" value="Joueur 2A"></div>
+        </div>
+        <div style="background:var(--bg);border-radius:var(--radius-sm);padding:10px;margin-bottom:8px">
+          <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:6px">Équipe 2</div>
+          <div class="form-row"><label>Joueur 1</label><input type="text" id="soloP1B" value="Joueur 1B"></div>
+          <div class="form-row"><label>Joueur 2</label><input type="text" id="soloP2B" value="Joueur 2B"></div>
+        </div>
+        <div class="form-row"><label>Nom équipe 1 (optionnel)</label><input type="text" id="soloName1" value="Équipe A"></div>
+        <div class="form-row"><label>Nom équipe 2 (optionnel)</label><input type="text" id="soloName2" value="Équipe B"></div>
+        <button class="btn btn-primary full" id="startSolo">Commencer la partie</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Règles</h2>
+      <div id="rulesList" class="rules-text"></div>
+    </div>
+  </div>
+
+  <!-- TERRAINS -->
+  <div class="screen" id="tab-terrain">
+    <div id="fieldsGrid" class="fields-grid"></div>
+    <div class="card">
+      <h2>Matchs à venir</h2>
+      <div id="scheduleList" class="muted"></div>
+    </div>
+  </div>
+
+  <!-- MATCH EN COURS -->
+  <div class="screen" id="tab-match">
+    <div class="card">
+      <div id="matchBanner" class="match-banner">Aucun match sélectionné</div>
+      <div id="matchFormat" class="match-format"></div>
+      <div id="tourBandeau" class="tour-bandeau" style="display:none">
+        <span id="tourJoueur" class="tour-joueur"></span>
+        <span id="tourEquipe" class="tour-equipe"></span>
+      </div>
+
+      <div class="score-display">
+        <div class="score-side">
+          <div class="score-team-name" id="nameA">Équipe A</div>
+          <div class="score-big" id="scoreA">0</div>
+        </div>
+        <div class="vs-divider">—</div>
+        <div class="score-side">
+          <div class="score-team-name" id="nameB">Équipe B</div>
+          <div class="score-big" id="scoreB">0</div>
+        </div>
+      </div>
+
+      <div id="mancheScore" class="manche-score"></div>
+
+      <!-- Toggle mode saisie -->
+      <div class="input-toggle">
+        <button class="toggle-btn active" id="toggleBtns">🎯 Pastilles</button>
+        <button class="toggle-btn" id="togglePad">🔢 Pavé numérique</button>
+      </div>
+
+      <!-- MODE PASTILLES -->
+      <div id="modeBtns">
+        <div class="grid2" style="margin-bottom:8px">
+          <div class="btn-col">
+            <div class="btn-col-label" id="labelBtnA">Équipe A</div>
+            <button class="btn score-btn" data-team="A" data-type="outside" id="btnAout">+1 Extérieur</button>
+            <button class="btn score-btn" data-team="A" data-type="box"     id="btnAbox">+3 Boîte</button>
+            <button class="btn score-btn" data-team="A" data-type="cylinder" id="btnAcyl">+5 Cylindre</button>
+          </div>
+          <div class="btn-col">
+            <div class="btn-col-label" id="labelBtnB">Équipe B</div>
+            <button class="btn score-btn" data-team="B" data-type="outside" id="btnBout">+1 Extérieur</button>
+            <button class="btn score-btn" data-team="B" data-type="box"     id="btnBbox">+3 Boîte</button>
+            <button class="btn score-btn" data-team="B" data-type="cylinder" id="btnBcyl">+5 Cylindre</button>
+          </div>
+        </div>
+        <button class="btn btn-primary full" id="confirmerVoleeBtn">✓ Confirmer la volée</button>
+      </div>
+
+      <!-- MODE PAVÉ NUMÉRIQUE -->
+      <div id="modePad" style="display:none">
+        <div class="grid2" style="gap:12px;margin-bottom:6px">
+
+          <!-- Pavé A -->
+          <div>
+            <div class="btn-col-label" id="padLabelA" style="margin-bottom:6px">Équipe A</div>
+            <div class="pad-display" id="padDisplayA">0</div>
+            <div class="numpad">
+              <button class="pad-btn" data-pad="A" data-val="1">1</button>
+              <button class="pad-btn" data-pad="A" data-val="2">2</button>
+              <button class="pad-btn" data-pad="A" data-val="3">3</button>
+              <button class="pad-btn" data-pad="A" data-val="4">4</button>
+              <button class="pad-btn" data-pad="A" data-val="5">5</button>
+              <button class="pad-btn" data-pad="A" data-val="6">6</button>
+              <button class="pad-btn" data-pad="A" data-val="7">7</button>
+              <button class="pad-btn" data-pad="A" data-val="8">8</button>
+              <button class="pad-btn" data-pad="A" data-val="9">9</button>
+              <button class="pad-btn pad-clear" data-pad="A" data-val="C">C</button>
+              <button class="pad-btn" data-pad="A" data-val="0">0</button>
+              <button class="pad-btn pad-ok" data-pad="A" data-val="OK">✓</button>
+            </div>
+          </div>
+
+          <!-- Pavé B -->
+          <div>
+            <div class="btn-col-label" id="padLabelB" style="margin-bottom:6px">Équipe B</div>
+            <div class="pad-display" id="padDisplayB">0</div>
+            <div class="numpad">
+              <button class="pad-btn" data-pad="B" data-val="1">1</button>
+              <button class="pad-btn" data-pad="B" data-val="2">2</button>
+              <button class="pad-btn" data-pad="B" data-val="3">3</button>
+              <button class="pad-btn" data-pad="B" data-val="4">4</button>
+              <button class="pad-btn" data-pad="B" data-val="5">5</button>
+              <button class="pad-btn" data-pad="B" data-val="6">6</button>
+              <button class="pad-btn" data-pad="B" data-val="7">7</button>
+              <button class="pad-btn" data-pad="B" data-val="8">8</button>
+              <button class="pad-btn" data-pad="B" data-val="9">9</button>
+              <button class="pad-btn pad-clear" data-pad="B" data-val="C">C</button>
+              <button class="pad-btn" data-pad="B" data-val="0">0</button>
+              <button class="pad-btn pad-ok" data-pad="B" data-val="OK">✓</button>
+            </div>
+          </div>
+
+        </div>
+        <div style="font-size:11px;color:#9CA3AF;text-align:center;margin-bottom:4px">
+          Entre le score brut de chaque équipe puis ✓ — la cancellation et le bust sont calculés automatiquement
+        </div>
+      </div>
+
+      <div class="undo-log" id="undoLog"></div>
+
+      <div class="actions-row">
+        <button class="btn" id="undoBtn">↩ Annuler</button>
+        <button class="btn btn-warning" id="resetRoundBtn">↺ Reset manche</button>
+        <button class="btn btn-success" id="endMatchBtn">✓ Terminer</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Historique des manches</h2>
+      <div id="roundHistory" class="muted">Aucune manche jouée.</div>
+    </div>
+  </div>
+
+  <!-- CLASSEMENT -->
+  <div class="screen" id="tab-classement">
+    <div class="card">
+      <h2>Classement</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>#</th><th>Équipe</th><th>PJ</th><th>V</th><th>D</th><th>PF</th><th>PA</th><th>Diff</th></tr>
+          </thead>
+          <tbody id="standingsBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Statistiques</h2>
+      <div class="grid3">
+        <div class="metric"><div class="metric-label">Matchs joués</div><div class="metric-value" id="statM">0</div></div>
+        <div class="metric"><div class="metric-label">Points totaux</div><div class="metric-value" id="statP">0</div></div>
+        <div class="metric"><div class="metric-label">Moy. pts/match</div><div class="metric-value" id="statA">—</div></div>
+      </div>
+    </div>
+    <div class="card" id="resultsCard" style="display:none">
+      <h2>Résultats</h2>
+      <div id="resultsList" class="muted"></div>
+    </div>
+  </div>
+
+</main>
+
+</div><!-- fin appContent -->
+<script src="script.js"></script>
+</body>
+</html>
